@@ -1,0 +1,25 @@
+{
+    "name": "Manim DevContainer",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "customizations": {
+        "settings": {
+            "python.analysis.extraPaths": [
+                "/home/vscode/.local/lib/python3.12/site-packages"
+            ],
+            "terminal.integrated.shell.linux": "/bin/bash"
+        },
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-toolsai.jupyter",
+                "ritwickdey.LiveServer"
+            ]
+        }
+    },
+    "postCreateCommand": "pip install --upgrade pip && pip install --user -r requirements.txt",
+    "remoteUser": "vscode",
+    "forwardPorts": []
+}
