@@ -30,7 +30,7 @@ jobs:
 
     - name: Run Manim Slides
       run: |
-        docker run -v ${{ github.workspace }}:/workspace manim-slides-presentation /bin/bash -c "
+        docker run -v ${{ github.workspace }}:/workspace -u vscode manim-slides-presentation /bin/bash -c "
         cd /workspace && \
         # Add your postCreateCommand here, for example:
         pip install --upgrade pip && pip install --user -r requirements.txt && \
