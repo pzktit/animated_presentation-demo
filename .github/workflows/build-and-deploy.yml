@@ -1,9 +1,9 @@
 name: Build and Deploy Manim Slides
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
 
 jobs:
@@ -30,7 +30,7 @@ jobs:
 
     - name: Run Manim Slides
       run: |
-        docker run -v ${{ github.workspace }}:/workspace -u vscode -e PATH="/home/vscode/.local/bin:${PATH}" manim-slides-presentation /bin/bash -c "
+        docker run -v ${{ github.workspace }}:/workspace -e PATH="/root/.local/bin:${PATH}" manim-slides-presentation /bin/bash -c "
         cd /workspace && \
         # Add your postCreateCommand here, for example:
         pip install --upgrade pip && pip install --user -r requirements.txt && \
