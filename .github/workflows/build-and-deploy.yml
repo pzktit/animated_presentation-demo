@@ -1,0 +1,46 @@
+name: Build and Deploy Manim Slides
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'  # Adjust as needed
+
+    - name: Install Docker
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+
+    - name: Build Docker image
+      run: |
+        docker build -t manim-slides-presentation .devcontainer
+
+    - name: Run Manim Slides
+      run: |
+        docker run -v ${{ github.workspace }}:/workspace manim-slides-presentation /bin/bash -c "
+        cd /workspace && \
+        # Add your postCreateCommand here, for example:
+        pip install --upgrade pip && pip install --user -r requirements.txt && \
+        # Run your Manim Slides commands
+        manim-slides render slides.py Demo && \
+        manim-slides convert Demo index.html
+        "
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./index.html ./index_assets
