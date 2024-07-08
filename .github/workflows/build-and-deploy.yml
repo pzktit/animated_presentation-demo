@@ -36,11 +36,41 @@ jobs:
         pip install --upgrade pip && pip install --user -r requirements.txt && \
         # Run your Manim Slides commands
         manim-slides render slides.py Demo && \
-        manim-slides convert Demo index.html
+        manim-slides convert Demo index.html && \
+        # Create output directory for GitHub Pages
+        mkdir -p output && \
+        cp index.html output/ && \
+        cp -r index_assets output/
         "
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./index.html ./index_assets
+        publish_dir: ./output
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: output
+        path: output
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: output
+        path: ./output
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./output
