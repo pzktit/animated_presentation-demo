@@ -12,12 +12,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'  # Adjust as needed
+      # - name: Set up Python
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: '3.12'  # Adjust as needed
 
       - name: Install Docker
         run: |
@@ -34,11 +34,8 @@ jobs:
           cd /workspace && ls -l . && mkdir akuku && \
           manim-slides render slides.py Demo && \
           manim-slides convert Demo _site/index.html
-          "
-      
-      - name: Checkout
-        uses: actions/checkout@v4
-      
+          "      
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
