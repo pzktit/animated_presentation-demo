@@ -19,11 +19,12 @@ RUN apt-get update -qq \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /home/vscode
 
-USER vscode
-
+RUN mkdir /work && chown -R vscode:vscode /work
+USER vscode:vscode
 ENV PATH="/home/vscode/.local/bin:${PATH}"        
 
-RUN pip install --upgrade pip && pip install --user pip && pipx install --verbose "manim-slides[manim,magic]"
+RUN pip install --upgrade pip && pip install ipykernel manim manim-slides
+# RUN pip install --user pipx
+# RUN pipx install --verbose "manim-slides[manim,magic]"
 
