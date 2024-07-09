@@ -25,6 +25,5 @@ USER vscode
 
 ENV PATH="/home/vscode/.local/bin:${PATH}"        
 
-COPY --chown=vscode:vscode requirements.txt .
+RUN pip install --upgrade pip && pip install --user pip && pipx install --verbose "manim-slides[manim,magic]"
 
-RUN pip install --upgrade pip && pip install --user -r requirements.txt
