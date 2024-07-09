@@ -15,7 +15,8 @@
             "extensions": [
                 "ms-python.python",
                 "ms-toolsai.jupyter",
-                "ritwickdey.LiveServer"
+                "ritwickdey.LiveServer",
+                "github.vscode-github-actions"
             ]
         }
     },
