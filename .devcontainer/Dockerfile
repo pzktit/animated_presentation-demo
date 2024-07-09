@@ -18,3 +18,13 @@ RUN apt-get update -qq \
         texlive-latex-extra \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /home/vscode
+
+USER vscode
+
+ENV PATH="/home/vscode/.local/bin:${PATH}"        
+
+COPY --chown=vscode:vscode requirements.txt .
+
+RUN pip install --upgrade pip && pip install --user -r requirements.txt

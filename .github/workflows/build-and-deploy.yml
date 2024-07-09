@@ -30,24 +30,16 @@ jobs:
 
     - name: Run Manim Slides
       run: |
-        docker run -v ${{ github.workspace }}:/workspace -e PATH="/root/.local/bin:${PATH}" manim-slides-presentation /bin/bash -c "
-        cd /workspace && \
-        # Add your postCreateCommand here, for example:
-        pip install --upgrade pip && pip install --user -r requirements.txt && \
-        # Run your Manim Slides commands
+        docker run -v ${{ github.workspace }}:/workspace manim-slides-presentation /bin/bash -c "
         manim-slides render slides.py Demo && \
-        manim-slides convert Demo index.html && \
-        # Create output directory for GitHub Pages
-        mkdir -p output && \
-        cp index.html output/ && \
-        cp -r index_assets output/
+        manim-slides convert Demo _site/index.html
         "
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./output
+        publish_dir: "./_site"
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
