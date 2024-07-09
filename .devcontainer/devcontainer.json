@@ -13,10 +13,10 @@
         },
         "vscode": {
             "extensions": [
+                "github.vscode-github-actions",
                 "ms-python.python",
                 "ms-toolsai.jupyter",
                 "ritwickdey.LiveServer",
-                "github.vscode-github-actions",
                 "ms-azuretools.vscode-docker"
             ]
         }
