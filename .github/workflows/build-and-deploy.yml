@@ -30,7 +30,7 @@ jobs:
 
       - name: Run Manim Slides
         run: |
-          docker run -v ${{ github.workspace }}:/workspace manim-slides-presentation /bin/bash -c "
+          docker run -u vscode -v ${{ github.workspace }}:/workspace manim-slides-presentation /bin/bash -c "
           ls -l /workspace && cd /workspace &&
           manim-slides render slides.py Demo && \
           manim-slides convert Demo _site/index.html
