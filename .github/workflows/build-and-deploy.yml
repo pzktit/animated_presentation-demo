@@ -35,22 +35,7 @@ jobs:
           manim-slides render slides.py Demo && \
           manim-slides convert Demo _site/index.html
           "
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: "./_site"
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
- 
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
- 
-    steps:
+      
       - name: Checkout
         uses: actions/checkout@v4
       
