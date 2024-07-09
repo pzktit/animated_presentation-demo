@@ -37,8 +37,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload selected files and folders
-          path: |
-            ./index.html
+          path: ./index.html
             ./index_assets
       - name: Deploy to GitHub Pages
         id: deployment
