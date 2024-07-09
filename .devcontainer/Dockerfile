@@ -25,6 +25,6 @@ USER vscode
 
 ENV PATH="/home/vscode/.local/bin:${PATH}"        
 
-COPY --chown=vscode:vscode requirements.txt .
+COPY --chown=vscode:vscode ./requirements.txt .
 
 RUN pip install --upgrade pip && pip install --user -r requirements.txt
