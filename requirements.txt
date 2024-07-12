@@ -1,3 +1,0 @@
-ipykernel
-manim
-manim-slides

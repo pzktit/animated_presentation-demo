@@ -1,6 +1,9 @@
 # Custom
 .directory
 .vscode/
+slides/*
+media/*
+preview/*
 # media/
 # Byte-compiled / optimized / DLL files
 __pycache__/

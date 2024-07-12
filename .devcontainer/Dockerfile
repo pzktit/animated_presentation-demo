@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye
+FROM mcr.microsoft.com/devcontainers/python
 
 RUN apt-get update -qq \
     && apt-get install --no-install-recommends -y \
@@ -20,11 +20,10 @@ RUN apt-get update -qq \
     && rm -rf /var/lib/apt/lists/*
 
 
-RUN mkdir /work && chown -R vscode:vscode /work
-USER vscode:vscode
-ENV PATH="/home/vscode/.local/bin:${PATH}"        
 
-RUN pip install --upgrade pip && pip install ipykernel manim manim-slides
+USER vscode:vscode
+WORKDIR /home/vscode
+ENV PATH="/home/vscode/.local/bin:${PATH}"        
+RUN pip install --upgrade pip && pip install ipykernel manim-slides[magic]
 # RUN pip install --user pipx
-# RUN pipx install --verbose "manim-slides[manim,magic]"
 

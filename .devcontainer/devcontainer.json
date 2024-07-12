@@ -21,7 +21,7 @@
             ]
         }
     },
-    "postCreateCommand": "cat /etc/issue",
+    "postCreateCommand": "uname -a",
     "remoteUser": "vscode",
     "forwardPorts": []
 }

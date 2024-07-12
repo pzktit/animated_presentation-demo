@@ -1,214 +1,130 @@
-# manim-slides render slides.py Demo
-# manim-slides convert Demo index.html
-# right-click index.html and open in LiveServer
+# > manim-slides render slides.py Title Points
+# or
+# > manim-slides render slides.py Title
+# > manim-slides render slides.py Points
+# and then
+# > manim-slides convert Tiltle Points preview/index.html
+# and then right-click index.html and open in LiveServer
+
+# you can also run the script directly
+# > python slides.py
+# but first modify the list of scenes to render and convert
+# at the end of the script you will find the main function that renders and converts the scenes
+scenes_to_render = ["Title"]
+scenes_for_conversion = ["Title", "Points"]
 
 from manim import *
 from manim_slides import Slide
 
-class Demo(Slide):
-    """WARNING: this example does not seem to work with ManimGL."""
-
+class Title(Slide):
     def construct(self):
         self.wait_time_between_slides = 0.1
-
+        plane = self.add(NumberPlane())
         title = VGroup(
-            Text("From Manim animations", t2c={"From": BLUE}),
-            Text("to slides presentation", t2c={"to": BLUE}),
-            Text("with Manim Slides", t2w={"[-12:]": BOLD}, t2c={"[-13:]": YELLOW}),
+            Text("Animowane zagadnienia", t2c={"Animowane": BLUE}),
+            Text("prezentacji", t2w={"[-9:]": BOLD}, t2c={"[-10:]": YELLOW}),
         ).arrange(DOWN)
 
-        step_1 = Text("1. In your scenes file, import Manim Slides")
-        step_2 = Text("2. Replace Scene with Slide")
-        step_3 = Text("3. In construct, add pauses where you need")
-        step_4 = Text("4. You can also create loops")
-        step_5 = Text("5. Render your scene with Manim")
-        step_6 = Text("6. Open your presentation with Manim Slides")
-
-        for step in [step_1, step_2, step_3, step_4, step_5, step_6]:
-            step.scale(0.5).to_corner(UL)
-
-        step = step_1
-
         self.play(FadeIn(title))
-
         self.next_slide()
+        self.play(ShrinkToCenter(title))
 
-        code = Code(
-            code="""from manim import *
-
-
-class Example(Scene):
+class Points(Slide):
     def construct(self):
-        dot = Dot()
-        self.add(dot)
+        self.wait_time_between_slides = 0.1
+        plane = self.add(NumberPlane())
+        # Get the canvas (frame) width in Manim units
+        canvas_width = config.frame_width
+        rect_width = canvas_width * 0.4
+        start_point = np.array([-6.5, 3.5, 0])
+        textstring = "Your Text Here"
+        first_obj = self.create_text_animation(start_point, rect_width, "To sem ja, pani Havrankowa",background_color=GREEN_B,background_opacity=0.8)
+        self.next_slide()
+        second_obj = self.create_text_animation(first_obj, rect_width, "Good morning",background_color=GREEN_B,background_opacity=0.8)
+        self.wait()
 
-        self.play(Indicate(dot, scale_factor=2))
+    def create_text_animation(self, point_or_mobject, rect_width, textstring, origin=ORIGIN, next_to=DOWN, text_color=BLACK, font_size=12, background_color=WHITE, background_opacity=1):
+        text = Text(textstring, color=text_color, font_size=font_size)
+        # Create background
+        rect_height = text.height + 0.2  # Small padding
+        rectangle = RoundedRectangle(width=rect_width, height=rect_height, corner_radius=0.1, color=background_color, fill_opacity=background_opacity)
+        rectangle.move_to(origin)
+        # Position the text to the right edge of the rectangle initially
+        text.move_to(rectangle.get_right() + text.width / 2 * RIGHT)
+        # Play the animations
+        self.play(Wait(1))
+        self.play(GrowFromPoint(rectangle, ORIGIN))
+        self.play(text.animate.move_to(rectangle.get_left() + text.width / 2 * RIGHT).set_run_time(5))                
 
-        square = Square()
-        self.play(Transform(dot, square))
+        gr = VGroup(rectangle,text)
+        # gr.shift(-gr.get_corner(UL)) # update anchor to Upper left corner
+        if isinstance(point_or_mobject, Mobject):  # Move the group to the specified position or next to the mobject
+            move_to_position = gr.animate.next_to(point_or_mobject, next_to).set_run_time(2)
+        else:
+            move_to_position = gr.animate.move_to(point_or_mobject-gr.get_corner(UL)).set_run_time(2)
+        self.play( move_to_position )
+        self.play(Indicate(gr))
+        return gr   
 
-        self.play(Rotate(square, angle=PI/2))
-""",
-            language="python",
-        )
+class SlideNG(Slide):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.wait_time_between_slides = 0.1
+    def create_text_animation(self, point_or_mobject, rect_width, textstring, origin=ORIGIN, next_to=DOWN, text_color=BLACK, font_size=12, background_color=WHITE, background_opacity=1):
+        text = Text(textstring, color=text_color, font_size=font_size)
+        # Create background
+        rect_height = text.height + 0.2  # Small padding
+        rectangle = RoundedRectangle(width=rect_width, height=rect_height, corner_radius=0.1, color=background_color, fill_opacity=background_opacity)
+        rectangle.move_to(origin)
+        # Position the text to the right edge of the rectangle initially
+        text.move_to(rectangle.get_right() + text.width / 2 * RIGHT)
+        # Play the animations
+        self.play(Wait(1))
+        self.play(GrowFromPoint(rectangle, ORIGIN))
+        self.play(text.animate.move_to(rectangle.get_left() + text.width / 2 * RIGHT).set_run_time(5))                
 
-        code_step_1 = Code(
-            code="""from manim import *
-from manim_slides import Slide
-
-class Example(Scene):
+        gr = VGroup(rectangle,text)
+        # gr.shift(-gr.get_corner(UL)) # update anchor to Upper left corner
+        if isinstance(point_or_mobject, Mobject):  # Move the group to the specified position or next to the mobject
+            move_to_position = gr.animate.next_to(point_or_mobject, next_to).set_run_time(2)
+        else:
+            move_to_position = gr.animate.move_to(point_or_mobject-gr.get_corner(UL)).set_run_time(2)
+        self.play( move_to_position )
+        self.play(Indicate(gr))
+        return gr   
+  
+class PointsNG(SlideNG):
     def construct(self):
-        dot = Dot()
-        self.add(dot)
-
-        self.play(Indicate(dot, scale_factor=2))
-
-        square = Square()
-        self.play(Transform(dot, square))
-
-        self.play(Rotate(square, angle=PI/2))
-""",
-            language="python",
-        )
-
-        code_step_2 = Code(
-            code="""from manim import *
-from manim_slides import Slide
-
-class Example(Slide):
-    def construct(self):
-        dot = Dot()
-        self.add(dot)
-
-        self.play(Indicate(dot, scale_factor=2))
-
-        square = Square()
-        self.play(Transform(dot, square))
-
-        self.play(Rotate(square, angle=PI/2))
-""",
-            language="python",
-        )
-
-        code_step_3 = Code(
-            code="""from manim import *
-from manim_slides import Slide
-
-class Example(Slide):
-    def construct(self):
-        dot = Dot()
-        self.add(dot)
-
-        self.play(Indicate(dot, scale_factor=2))
+        plane = self.add(NumberPlane())
+        # Get the canvas (frame) width in Manim units
+        canvas_width = config.frame_width
+        rect_width = canvas_width * 0.4
+        start_point = np.array([-6.5, 3.5, 0])
+        textstring = "Your Text Here"
+        first_obj = self.create_text_animation(start_point, rect_width, "To sem ja, pani Havrankowa",background_color=GREEN_B,background_opacity=0.8)
         self.next_slide()
-        square = Square()
-        self.play(Transform(dot, square))
-        self.next_slide()
-        self.play(Rotate(square, angle=PI/2))
-""",
-            language="python",
-        )
+        second_obj = self.create_text_animation(first_obj, rect_width, "Good morning",background_color=GREEN_B,background_opacity=0.8)
+        self.wait()
 
-        code_step_4 = Code(
-            code="""from manim import *
-from manim_slides import Slide
+import os
+import subprocess
 
-class Example(Slide):
-    def construct(self):
-        dot = Dot()
-        self.add(dot)
-        self.next_slide(loop=True)
-        self.play(Indicate(dot, scale_factor=2))
-        self.next_slide()
-        square = Square()
-        self.play(Transform(dot, square))
-        self.next_slide()
-        self.play(Rotate(square, angle=PI/2))
-""",
-            language="python",
-        )
+def main():
+    # Get the name of the current script to use in commands
+    script_name = os.path.basename(__file__)
+    
+    # Base command for rendering
+    render_command_base = f"manim-slides render {script_name}"
+    
+    # Render each scene
+    for scene in scenes_to_render:
+        render_command = f"{render_command_base} {scene}"
+        subprocess.run(render_command, shell=True, check=True)
+    
+    # Convert command with scenes for conversion
+    convert_command = f"manim-slides convert {' '.join(scenes_for_conversion)} preview/index.html"
+    print(convert_command)
+    subprocess.run(convert_command, shell=True, check=True)
 
-        code_step_5 = Code(
-            code="manim-slide render example.py Example",
-            language="console",
-        )
-
-        code_step_6 = Code(
-            code="manim-slides Example",
-            language="console",
-        )
-
-        or_text = Text("or generate HTML presentation").scale(0.5)
-
-        code_step_7 = Code(
-            code="manim-slides convert Example slides.html --open",
-            language="console",
-        ).shift(DOWN)
-
-        self.wipe(title, code)
-        self.next_slide()
-
-        self.play(FadeIn(step, shift=RIGHT))
-        self.play(Transform(code, code_step_1))
-        self.next_slide()
-
-        self.play(Transform(step, step_2))
-        self.play(Transform(code, code_step_2))
-        self.next_slide()
-
-        self.play(Transform(step, step_3))
-        self.play(Transform(code, code_step_3))
-        self.next_slide()
-
-        self.play(Transform(step, step_4))
-        self.play(Transform(code, code_step_4))
-        self.next_slide()
-
-        self.play(Transform(step, step_5))
-        self.play(Transform(code, code_step_5))
-        self.next_slide(auto_next=True)
-
-        self.play(Transform(step, step_6))
-        self.play(Transform(code, code_step_6))
-        self.play(code.animate.shift(UP), FadeIn(code_step_7), FadeIn(or_text))
-
-        watch_text = Text("Watch results on next slides!").shift(2 * DOWN).scale(0.5)
-
-        self.next_slide(loop=True)
-        self.play(FadeIn(watch_text))
-        self.play(FadeOut(watch_text))
-        self.next_slide()
-        self.clear()
-
-        dot = Dot()
-        self.add(dot)
-        self.next_slide(loop=True)
-        self.play(Indicate(dot, scale_factor=2))
-        self.next_slide()
-        square = Square()
-        self.play(Transform(dot, square))
-        self.remove(dot)
-        self.add(square)
-        self.next_slide()
-        self.play(Rotate(square, angle=PI / 4))
-        self.next_slide()
-        learn_more_text = (
-            VGroup(
-                Text("Learn more about Manim Slides:"),
-                Text("https://github.com/jeertmans/manim-slides", color=YELLOW),
-            )
-            .arrange(DOWN)
-            .scale(0.75)
-        )
-        self.play(Transform(square, learn_more_text))      
-        self.next_slide()
-        formulas = (
-            VGroup(
-                Tex(r"\LaTeX{} is supported too", font_size=144),
-                Tex(r"\[ F(x) = \int_{-\infty}^{x} \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left(-\frac{(t - \mu)^2}{2\sigma^2}\right) \, dt \]", font_size=100,color=BLUE)
-            )
-            .arrange(DOWN)
-            .scale(0.75)
-        )
-        self.play(Transform(square,formulas))
-
+if __name__ == "__main__":
+    main()

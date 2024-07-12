@@ -28,7 +28,7 @@ jobs:
         run: |
           docker build -t manim-slides-presentation .devcontainer
 
-      - name: Run Manim Slides
+      - name: Run Manim Slides # Tu jest problem z prawami do plików i manim-slides render kończy błędem ;(
         run: |
           docker run -v ${{ github.workspace }}:/work manim-slides-presentation /bin/bash -c "
           cd /work && \
