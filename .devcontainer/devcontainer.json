@@ -1,9 +1,10 @@
 {
     "name": "Manim DevContainer",
-    "build": {
-        "dockerfile": "Dockerfile",
-        "context": ".."
-    },
+    "image": "ghcr.io/pzktit/manim-devcontainer:latest",
+    // "build": {
+    //     "dockerfile": "Dockerfile",
+    //     "context": ".."
+    // },
     "customizations": {
         "settings": {
             "python.analysis.extraPaths": [
@@ -13,11 +14,11 @@
         },
         "vscode": {
             "extensions": [
-                "github.vscode-github-actions",
                 "ms-python.python",
                 "ms-toolsai.jupyter",
                 "ritwickdey.LiveServer",
-                "ms-azuretools.vscode-docker"
+                "GitHub.copilot",
+                "github.vscode-github-actions"
             ]
         }
     },
