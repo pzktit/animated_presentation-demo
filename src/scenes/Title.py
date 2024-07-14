@@ -5,7 +5,7 @@ from lib.addons import addons
 
 class Title(Slide,addons):
     def construct(self):
-        self.font=f"IBM Plex Serif"
+        self.font=f"Latin Modern Sans"
         self.font_size=48
         plane = self.add(NumberPlane())
         title = VGroup(

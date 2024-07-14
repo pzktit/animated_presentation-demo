@@ -5,7 +5,7 @@ DEVELOPED_SCENE := Points
 SRC_DIR := src/scenes
 SLIDES_DIR := slides
 # Rendering options
-RENDER_OPTIONS := --CE --resolution 1920,1080 --frame_rate 30
+RENDER_OPTIONS := --CE --resolution 1920,1080 --frame_rate 30 -v WARNING
 # Conversion options
 CONVERT_OPTIONS := -ccontrols=true
 
@@ -14,24 +14,26 @@ SRC_FILES := $(foreach scene,$(PRESENTATION),$(SRC_DIR)/$(scene).py)
 JSON_FILES := $(patsubst $(SRC_DIR)/%.py,$(SLIDES_DIR)/%.json,$(SRC_FILES))
 
 # Target for unconditional build
-.PHONY: all build clean
+.PHONY: all release clean
 
 # Default target is 'all'
-all: build link
-
-# Rule to build all scenes
-build: $(JSON_FILES)
-	@echo "Building all scenes"
+all: preview
 
 # Rule to selectively build developen scene
 test: $(DEVELOPED_SCENE)
 	@echo "Building $(DEVELOPED_SCENE)"
 
 # Rule to link the built scenes
-link: $(JSON_FILES)
-	@echo "Linking scenes"
+preview: $(JSON_FILES)
+	@echo "Builds scenes"
 	@echo "Building presentation in preview/index.html for $(notdir $(basename $(JSON_FILES)))"
 	@manim-slides convert $(CONVERT_OPTIONS) $(PRESENTATION) preview/index.html
+
+release: $(JSON_FILES) 
+	@echo "Builds scenes"
+	@echo "Building presentation in _site/index.html for $(notdir $(basename $(JSON_FILES)))"
+	@manim-slides convert $(CONVERT_OPTIONS) $(PRESENTATION) _site/index.html
+
 
 # Rule to build selected scene
 %: $(SRC_DIR)/%.py
